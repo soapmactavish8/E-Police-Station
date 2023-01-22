@@ -1,0 +1,380 @@
+{% block profile_content %}
+<div class="row mt-4 mb-4">
+  <div class="col-2">
+    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+      <a class="nav-link active" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab"
+        aria-controls="v-pills-profile" aria-selected="false">Profile</a>
+
+      <a class="nav-link" id="v-pills-complaint-tab" data-toggle="pill" href="#v-pills-complaint" role="tab"
+        aria-controls="v-pills-complaint" aria-selected="false">Complaints</a>
+
+      <a class="nav-link" id="v-pills-security-tab" data-toggle="pill" href="#v-pills-security" role="tab"
+        aria-controls="v-pills-security" aria-selected="false">Security</a>
+    </div>
+  </div>
+
+  <div class="col-10">
+    <div class="tab-content" id="v-pills-tabContent">
+      <div class="tab-pane fade active show" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+        <form class="needs-validation form-contact p-4" novalidate="false" action="{% url 'profile_update' %}"
+          method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <div class="input-group mb-3">
+                  <div class="form-group wrap-custom-file">
+                    <input type="file" name="user_image" id="user_image" accept=".jpg, .png" />
+                    {% if profile_data.Image %}
+                    <label for="user_image">
+                      {% else %}
+                      <label for="user_image">
+                        {% endif %}
+                        <span><i class="fa fa-user" aria-hidden="true"></i></span>
+                        <i class="icon-add fa fa-plus-circle"></i>
+                        <i class="icon-edit fa fa-edit d-none"></i>
+                      </label>
+                      <div class="invalid-feedback">Please enter fullname.</div>
+                  </div>
+                  <div class="input-group-append ml-3">
+                    <div class="form-group">
+                      {% if profile_data.FullName != '' %}
+                      <h3>{{profile_data.FullName}}</h3>
+                      {% else %}
+                      <h3>Hello Guest!</h3>
+                      {% endif %}
+
+                      <h5>{{profile_data.Master.Email}}</h5>
+
+                      {% if profile_data.Master.Role.Role == 'user' %}
+                      <h6>Citizen</h6>
+                      {% else %}
+                      <h6>Hello Guest!</h6>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-2">
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="fullname" class="h6">Full Name</label>
+                  <input type="text" class="form-control" id="fullname" name="fullname"
+                    value="{{profile_data.FullName}}" placeholder="Enter full name" required="">
+                  <div class="invalid-feedback">Please enter fullname.</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="mobile" class="h6">Mobile</label>
+                  <input type="text" name="mobile" id="mobile" class="form-control input-sm" maxlength="10"
+                    placeholder="Enter your mobile" value="{{profile_data.Mobile}}" required>
+                  <div class="invalid-feedback">Please enter your mobile number.</div>
+                </div>
+
+                <div class="form-group ">
+                  <label for="gender" class="h6">Gender</label>
+                  <div class="pt-2 form-control">
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input type="radio" id="male" name="gender" value="m" class="m custom-control-input" required>
+                      <label class="custom-control-label" for="male">Male</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input type="radio" id="female" name="gender" value="f" class="f custom-control-input" required>
+                      <label class="custom-control-label" for="female">Female</label>
+                      <br>
+                      <div class="invalid-feedback ml-2">Please choose your gender.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="address" class="h6">Address</label>
+                  <textarea class="form-control" id="address" name="address" rows="3"
+                    required>{{profile_data.Address}}</textarea>
+                  <div class="invalid-feedback">Please provide your address.</div>
+                </div>
+
+              </div>
+
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="country" class="h6">Contry</label>
+                  <input type="text" class="form-control" id="country" name="country" value="{{profile_data.Country}}"
+                    placeholder="Enter country" required="">
+                  <div class="invalid-feedback">Please enter country.</div>
+                </div>
+
+
+                <!-- <label for="state" class="h6">State</label>
+                <div class="dropdown show">
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                  </div>
+                </div> -->
+
+
+                <!-- <div class="form-group">
+                  <label for="city" class="h6">City</label>
+                  <input type="text" name="city" id="city" class="form-control input-sm" maxlength="10"
+                    placeholder="Enter your city" value="{{profile_data.City}}" required>
+                  <div class="invalid-feedback">Please enter your city.</div>
+                </div> -->
+
+                <div class="form-group">
+                  <label for="pincode" class="h6">Pincode</label>
+                  <input type="text" name="pincode" id="pincode" class="form-control input-sm" maxlength="10"
+                    placeholder="Enter your Pincode" value="{{profile_data.Pincode}}" required>
+                  <div class="invalid-feedback">Please enter your Pincode.</div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="row mt-2">
+              <div class="col-12 text-center mt-4">
+                <div class="form-group">
+                  <div id="success"></div>
+                  <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i>
+                    Update</button>
+                </div>
+                <div class="mt-2"></div>
+                <p><em>We will send you email to confirm your appointment, after you've request an
+                    appointment.</em></p>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="tab-pane fade" id="v-pills-complaint" role="tabpanel" aria-labelledby="v-pills-complaint-tab">
+        <ul class="nav nav-tabs inner-tabs m-0 mb-4" id="inner_tabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="suspect-details-tab" data-toggle="tab" href="#suspect-details" role="tab"
+              aria-controls="suspect-details" aria-selected="true">Suspect Details</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="file-complaints-tab" data-toggle="tab" href="#file-complaints" role="tab"
+              aria-controls="file-complaints" aria-selected="false">File Complaints</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="compalint_content">
+          <div class="tab-pane fade show active" id="suspect-details" role="tabpanel"
+            aria-labelledby="suspect-details-tab">
+            <form class="needs-validation form-contact" novalidate="false" action="{% url 'create_suspect_list' %}"
+              method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-3">
+                    <div class="input-group mb-3">
+                      <div class="form-group wrap-custom-file">
+                        <input type="file" name="suspect_image" id="suspect_image" accept=".jpg, .png" />
+                        <label for="suspect_image">
+                          <span><i class="fa fa-user" aria-hidden="true"></i></span>
+                          <i class="icon-add fa fa-plus-circle"></i>
+                          <i class="icon-edit fa fa-edit d-none"></i>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                      <label for="suspect_name" class="h6">Suspect Name</label>
+                      <input type="text" class="form-control" id="suspect_name" name="suspect_name" value=""
+                        placeholder="Enter suspect name" required="">
+                      <div class="invalid-feedback">Please enter suspect name.</div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="suspect_mobile" class="h6">Mobile</label>
+                      <input type="text" name="suspect_mobile" id="suspect_mobile" class="form-control input-sm"
+                        maxlength="10" placeholder="Enter suspect mobile" value="">
+                      <div class="invalid-feedback">Please enter your mobile number.</div>
+                    </div>
+
+                    <div class="form-group ">
+                      <label for="suspect_gender" class="h6">Gender</label>
+                      <div class="pt-2 form-control">
+                        <div class="custom-control custom-radio custom-control-inline">
+                          <input type="radio" id="suspect_male" name="suspect_gender" value="m"
+                            class="m custom-control-input" required>
+                          <label class="custom-control-label" for="suspect_male">Male</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                          <input type="radio" id="suspect_female" name="suspect_gender" value="f"
+                            class="f custom-control-input" required>
+                          <label class="custom-control-label" for="suspect_female">Female</label>
+                          <br>
+                          <div class="invalid-feedback ml-2">Please choose your gender.</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="suspect_address" class="h6">Suspect Address</label>
+                      <textarea type="text" class="form-control" id="suspect_address" name="suspect_address"
+                        placeholder="Write suspect address lines.." required></textarea>
+                      <div class="invalid-feedback">Please enter suspect address.</div>
+                    </div>
+
+                    <div class="form-group">
+                      <div id="success"></div>
+                      <button type="submit" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i>
+                        Add Suspect</button>
+                    </div>
+                  </div>
+
+                  <div class="col-5">
+                    <div class="suspect_list pr-2" style="height: 50vh;overflow: auto;">
+                      {% for suspect in suspect_list %}
+                      <div class="card mb-2" style="width: 100%;">
+                        <h5 class="h6 card-header m-0 text-muted"><i class="fa fa-user" aria-hidden="true"></i>
+                          {{suspect.SuspectName}}</h5>
+                        {% if not 'avtar' in suspect.Image.url %}
+                        <img src="{{suspect.Image.url}}" class="img-thumbnail" alt="{{suspect.SuspectName}}">
+                        {% endif %}
+                        <div class="card-body">
+                          {% if suspect.SuspectMobile %}
+                          <label class="h5 card-subtitle mb-2"><i class="fa fa-mobile mr-1" aria-hidden="true"></i>
+                            {{suspect.SuspectMobile}}</label>
+                          {% endif %}
+                          <label class="h5 card-subtitle mb-2"><i class="fa fa-map-marker mr-1" aria-hidden="true"></i>
+                            {{suspect.SuspectAddress}}</label>
+                          <hr>
+                          <a href="{% url 'remove_suspect_detail' pk=suspect.id %}"
+                            class="card-link btn btn-danger m-auto"><i class="fa fa-trash-o" aria-hidden="true"></i>
+                            Remove</a>
+                        </div>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class="tab-pane fade" id="file-complaints" role="tabpanel" aria-labelledby="file-complaints-tab">
+            <div class="row">
+              <div class="col-5">
+                <label class="h5">File a Complaint</label>
+                <form class="needs-validation form-appoinment" novalidate="false" action="#" method="POST">
+                  {% csrf_token %}
+                 
+
+                 
+          
+                    <div class="col-12">
+                      <div class="form-group">
+                        <label for="dob" class="h6">Date of Crime</label>
+                        <input type="text" name="DateOfCrime" id="DateOfCrime"
+                        class="form-control input-sm datepicker" placeholder="Enter date of crime"
+                        value="May 01, 2021" required>                      
+                      </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="form-group">
+                          <label for="dob" class="h6">Date created</label>
+                          <input type="text" name="DateCreated" id="DateCreated"
+                          class="form-control input-sm datepicker" placeholder="Enter Complaint date"
+                          value="May 01, 2021" required>                      
+                        </div>
+                        </div>
+                      <div class="row">
+                        <div class="form-group col-12">
+                          <label for="description" class="h6">Description</label>
+                          <textarea class="form-control" id="description" name="description"
+                            placeholder="Write crime description.." rows="2" required></textarea>
+                          <div class="invalid-feedback">Please provide crime description.</div>
+                        </div>
+                      </div>
+
+
+
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                </form>
+              </div>
+              <div class="col-7">
+
+
+                <div class="table-responsive p-0 m-0 table-history" empty="You don't have history"
+                  style="height: 200px;">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">Suspect</th>
+                        <th scope="col">Crime</th>
+                        <th scope="col">Date/Time</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for appointment in all_appointments %}
+                      <tr>
+                        <td>{{appointment.PetDetail.Name}}</td>
+                        <td>{{appointment.Symptoms}}</td>
+                        <td>{{appointment.DateTime}}</td>
+                        <td>{{appointment.Status}}</td>
+                        <td class="text-center">
+                          <a href="{% url 'remove_appointment' pk=appointment.id %}" data-toggle="tooltip"
+                            data-placement="bottom" title="Remove {{appointment.PetDetail.Name}}'s appointment"
+                            class="btn btn-danger p-0 pr-1 pl-1" style="min-width: min-content; font-size: small;">
+                            <i class="fa fa-times"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="tab-pane fade" id="v-pills-security" role="tabpanel" aria-labelledby="v-pills-security-tab">
+        <label class="h5">Change Password</label>
+        <form class="needs-validation form-contact mt-4" novalidate="false" action="{% url 'change_password' %}"
+          method="POST" enctype="multipart/form-data">
+
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label for="password" class="h6">Current Password</label>
+                <input type="password" class="form-control" id="password" name="current_password"
+                  placeholder="Enter current password" required>
+                <div class="invalid-feedback">Please enter current password.</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label for="new_password" class="h6">New Password</label>
+                <input type="password" class="form-control" id="new_password" name="new_password"
+                  placeholder="New password" required>
+                <div class="invalid-feedback">Please create your new password.</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 text-center mt-4">
+            <div class="form-group">
+              <div id="success"></div>
+              <button type="submit" class="btn btn-primary"><i class="fa fa-exchange mr-2"
+                  aria-hidden="true"></i>Change</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
